@@ -1,175 +1,407 @@
-import { useState, useRef } from "react";
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Daily Life Adventure</title>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:system-ui,-apple-system,sans-serif;background:#f5f5ff;}
+    button{font-family:inherit;cursor:pointer;}
+    textarea{font-family:inherit;}
+    select{font-family:inherit;}
+  </style>
+</head>
+<body>
+<div id="root"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<script>
+const e = React.createElement;
+const {useState, useRef} = React;
+
+const scrambleMission = {
+  id:10, title:"Mission 10 – Unscramble the Sentence!", icon:"🔀", points:10, type:"scramble",
+  instructions:"Tap the words in the correct order to build the sentence!",
+  questions:[
+    {words:["I","get","up","at","quarter","past","seven"], answer:"I get up at quarter past seven"},
+    {words:["She","always","brushes","her","teeth","at","eight","o'clock"], answer:"She always brushes her teeth at eight o'clock"},
+    {words:["We","never","eat","breakfast","at","half","past","six"], answer:"We never eat breakfast at half past six"},
+    {words:["He","usually","walks","the","dog","at","quarter","to","five"], answer:"He usually walks the dog at quarter to five"},
+    {words:["I","sometimes","cook","dinner","at","seven","o'clock"], answer:"I sometimes cook dinner at seven o'clock"},
+    {words:["She","always","goes","to","bed","at","half","past","nine"], answer:"She always goes to bed at half past nine"},
+  ]
+};
 
 const missions = [
-  {
-    id: 1,
-    title: "Mission 1 – Daily Tasks",
-    icon: "📖",
-    points: 12.5,
-    type: "multiple_choice",
-    instructions: "Read each sentence and choose the correct chore.",
-    questions: [
-      { q: '"Every morning, I use a broom to clean the floor."', options: ["cook", "sweep", "feed the dog", "do the dishes"], answer: "sweep" },
-      { q: '"After dinner, Maria washes all the plates and cups."', options: ["clean up", "cook", "do the dishes", "take the dog for a walk"], answer: "do the dishes" },
-      { q: '"Tom puts food in the bowl for his pet."', options: ["feed the dog", "sweep", "cook", "clean up"], answer: "feed the dog" }
-    ]
-  },
-  {
-    id: 2,
-    title: "Mission 2 – Listening: What Time Is It?",
-    icon: "🕐",
-    points: 12.5,
-    type: "multiple_choice",
-    instructions: "Listen and choose the correct time!",
-    questions: [
-      { q: '"It is half past seven."', options: ["7:00","7:15","7:30","7:45"], answer: "7:30" },
-      { q: '"It is quarter to nine."', options: ["9:00","8:45","9:15","8:30"], answer: "8:45" },
-      { q: '"It is quarter past three."', options: ["3:00","3:45","3:30","3:15"], answer: "3:15" }
-    ]
-  },
-  {
-    id: 3,
-    title: "Mission 3 – Reading",
-    icon: "📖",
-    points: 12.5,
-    type: "true_false",
-    instructions: "Read the diary entry and say TRUE or FALSE!",
-    text: `My name is Leo. I wake up at half past six and help my mom. At 4:15 I walk my dog.`,
-    questions: [
-      { q: "Leo wakes up at 6:30.", answer: true },
-      { q: "Leo never helps.", answer: false }
-    ]
-  },
-  {
-    id: 4,
-    title: "Mission 4 – Writing",
-    icon: "✏️",
-    points: 12.5,
-    type: "writing",
-    instructions: "Write about your routine!",
-    questions: [
-      { q: "What do you do every day?", placeholder: "I always..." }
-    ]
-  },
-  {
-    id: 5,
-    title: "Mission 5 – Time + Routine",
-    icon: "⏰",
-    points: 12.5,
-    type: "multiple_choice",
-    instructions: "Choose the correct sentence!",
-    questions: [
-      { q: "6:30", options: ["half past six","six past half"], answer: "half past six" }
-    ]
-  },
-  {
-    id: 6,
-    title: "Mission 6 – Adverbs",
-    icon: "📊",
-    points: 12.5,
-    type: "multiple_choice",
-    questions: [
-      { q: "I ___ study every day", options: ["never","always"], answer: "always" }
-    ]
-  },
-  {
-    id: 7,
-    title: "Mission 7 – Correction",
-    icon: "🔧",
-    points: 12.5,
-    type: "multiple_choice",
-    questions: [
-      { q: "She cook", options: ["She cooks","She cooking"], answer: "She cooks" }
-    ]
-  },
-  {
-    id: 8,
-    title: "Mission 8 – Grammar",
-    icon: "🏆",
-    points: 12.5,
-    type: "multiple_choice",
-    questions: [
-      { q: "I have ___ milk", options: ["some","any"], answer: "some" }
-    ]
-  }
+  {id:1,title:"Mission 1 – Reading: Daily Tasks",icon:"📚",points:10,type:"multiple_choice",
+   instructions:"Read each sentence and choose the correct chore.",
+   questions:[
+    {q:'"Every morning, I use a broom to clean the floor."',options:["cook","sweep","feed the dog","do the dishes"],answer:"sweep"},
+    {q:'"After dinner, Maria washes all the plates and cups."',options:["clean up","cook","do the dishes","take the dog for a walk"],answer:"do the dishes"},
+    {q:'"Tom puts food in the bowl for his pet."',options:["feed the dog","sweep","cook","clean up"],answer:"feed the dog"}
+  ]},
+  {id:2,title:"Mission 2 – Reading: What Time Is It?",icon:"🕐",points:10,type:"multiple_choice",
+   instructions:"Read and choose the correct time!",
+   questions:[
+    {q:'"It is half past seven."',options:["7:00","7:15","7:30","7:45"],answer:"7:30"},
+    {q:'"It is quarter to nine."',options:["9:00","8:45","9:15","8:30"],answer:"8:45"},
+    {q:'"It is quarter past three."',options:["3:00","3:45","3:30","3:15"],answer:"3:15"}
+  ]},
+  {id:3,title:"Mission 3 – Reading Comprehension",icon:"📖",points:10,type:"true_false",
+   instructions:"Read the diary entry and say TRUE or FALSE!",
+   text:"📔 My Daily Diary — by Leo, age 10\n\nHi! My name is Leo. Every day I wake up at half past six. I always eat breakfast with my family. I usually help my mom — I sweep the floor and do the dishes after lunch. Sometimes I cook simple things like eggs! At quarter past four, I take my dog Rex for a walk. In the evening, I never forget to feed Rex. I go to bed at nine o'clock. I love my daily routine!",
+   questions:[
+    {q:"Leo wakes up at seven o'clock.",answer:false},
+    {q:"Leo always eats breakfast alone.",answer:false},
+    {q:"Leo sometimes cooks simple things.",answer:true},
+    {q:"Leo takes his dog for a walk at quarter past four.",answer:true},
+    {q:"Leo sometimes forgets to feed Rex.",answer:false}
+  ]},
+  {id:4,title:"Mission 4 – Personal Writing",icon:"✏️",points:10,type:"writing",
+   instructions:"Answer the questions about yourself! Write complete sentences.",
+   questions:[
+    {q:"What do you do every day? (write at least 2 things)",placeholder:"e.g. I always brush my teeth. I usually eat breakfast..."},
+    {q:"What do you do at half past seven in the morning?",placeholder:"e.g. At half past seven I..."},
+    {q:"What do you do at nine o'clock at night?",placeholder:"e.g. At nine o'clock I..."}
+  ]},
+  {id:5,title:"Mission 5 – Reading: Breakfast Time!",icon:"🍳",points:10,type:"multiple_choice",
+   instructions:"Read the text and choose the correct answer!",
+   text:"🍽️ My name is Jake and breakfast is my favorite meal! Every morning, my family eats together at home.\n\nMy sister always has cereal with milk and a glass of orange juice. My dad eats two boiled eggs and some toast. I love a warm bread roll with butter and a big apple. Our cat is part of the family too — she gets a bowl of tuna every morning. My mom doesn't eat much — just a cup of yogurt with strawberries!",
+   questions:[
+    {q:"What does Jake eat for breakfast?",options:["Cereal with milk","Boiled eggs","A bread roll with butter","Yogurt with strawberries"],answer:"A bread roll with butter"},
+    {q:"Who doesn't eat any fruit for breakfast?",options:["Jake","Jake's sister","Jake's dad","Jake's mom"],answer:"Jake's dad"},
+    {q:"What does the cat eat in the morning?",options:["Cereal with milk","A bowl of tuna","Boiled eggs","Yogurt"],answer:"A bowl of tuna"},
+    {q:"What does Jake's mom eat?",options:["Toast and eggs","Cereal with milk","Yogurt with strawberries","A bread roll"],answer:"Yogurt with strawberries"},
+    {q:"What does Jake's sister drink?",options:["Milk","Water","Orange juice","Tea"],answer:"Orange juice"}
+  ]},
+  {id:6,title:"Mission 6 – Time + Routine",icon:"⏰",points:10,type:"multiple_choice",
+   instructions:"Choose the correct sentence about daily routines and time!",
+   questions:[
+    {q:"I get up at 6:30.",options:["I get up at half past six.","I get up at six past half.","I get up at half six past.","I get up at six half."],answer:"I get up at half past six."},
+    {q:"School starts at 7:15.",options:["School starts at quarter past seven.","School starts at seven quarter.","School starts at quarter to seven.","School starts at seven past quarter."],answer:"School starts at quarter past seven."},
+    {q:"I go to bed at 8:45.",options:["I go to bed at quarter past nine.","I go to bed at quarter to nine.","I go to bed at half past eight.","I go to bed at eight quarter."],answer:"I go to bed at quarter to nine."}
+  ]},
+  {id:7,title:"Mission 7 – Adverbs of Frequency",icon:"📊",points:10,type:"multiple_choice",
+   instructions:"Choose the correct adverb to complete each sentence!",
+   questions:[
+    {q:"I _____ brush my teeth — every single day, twice a day!",options:["never","sometimes","always","usually"],answer:"always"},
+    {q:"I _____ cook on weekends, but not every weekend.",options:["always","never","sometimes","usually"],answer:"sometimes"},
+    {q:"I _____ forget to feed my dog. I love him too much!",options:["always","usually","sometimes","never"],answer:"never"},
+    {q:"I _____ sweep the floor after dinner — almost every night.",options:["never","sometimes","usually","always"],answer:"usually"}
+  ]},
+  {id:8,title:"Mission 8 – Sentence Correction",icon:"🔧",points:10,type:"multiple_choice",
+   instructions:"Find the CORRECT version of each sentence!",
+   questions:[
+    {q:"❌ She cook dinner every day.",options:["She cooking dinner every day.","She cooks dinner every day.","She is cook dinner every day.","She do cooks dinner every day."],answer:"She cooks dinner every day."},
+    {q:"❌ I am usually take the dog for a walk.",options:["I usually takes the dog for a walk.","I am usually walking the dog for a walk.","I usually take the dog for a walk.","I usually taking the dog for a walk."],answer:"I usually take the dog for a walk."},
+    {q:"❌ Does he likes to clean up?",options:["Does he like to clean up?","Do he likes to clean up?","Does he liking to clean up?","Does he to like clean up?"],answer:"Does he like to clean up?"}
+  ]},
+  {id:9,title:"Mission 9 – Grammar Choice",icon:"🏆",points:10,type:"multiple_choice",
+   instructions:"Choose the correct word to complete each sentence!",
+   questions:[
+    {q:"Is there _____ milk in the fridge?",options:["some","any","a","the"],answer:"any"},
+    {q:"I have _____ homework to do tonight.",options:["any","an","some","are"],answer:"some"},
+    {q:"The vet _____ care of animals every day.",options:["take","takes","taking","to take"],answer:"takes"}
+  ]},
+  scrambleMission
 ];
 
-export default function App() {
-  const [screen,setScreen]=useState("home");
-  const [missionIdx,setMissionIdx]=useState(0);
-  const [totalScore,setTotalScore]=useState(0);
-  const [coins,setCoins]=useState(0);
-  const [answers,setAnswers]=useState({});
-  const [submitted,setSubmitted]=useState(false);
+const MC = missionColors = [
+  {bg:"#fff0f6",accent:"#e91e8c",light:"#ffd6eb"},
+  {bg:"#f0f4ff",accent:"#4361ee",light:"#c8d3ff"},
+  {bg:"#f0fff4",accent:"#16a34a",light:"#bbf7d0"},
+  {bg:"#fffbeb",accent:"#d97706",light:"#fde68a"},
+  {bg:"#fff8f0",accent:"#ea580c",light:"#fed7aa"},
+  {bg:"#f0fdff",accent:"#0891b2",light:"#a5f3fc"},
+  {bg:"#f7fff0",accent:"#65a30d",light:"#d9f99d"},
+  {bg:"#fff0f0",accent:"#dc2626",light:"#fecaca"},
+  {bg:"#f0f0ff",accent:"#6d28d9",light:"#c4b5fd"},
+  {bg:"#f5fff0",accent:"#16803c",light:"#bbf7d0"},
+];
 
-  const mission=missions[missionIdx];
+const medals = [
+  {min:90,label:"🏆 Genius Explorer!",sub:"Outstanding work!",color:"#d97706"},
+  {min:70,label:"🥈 Super Adventurer!",sub:"Really well done!",color:"#64748b"},
+  {min:50,label:"🥉 Brave Beginner!",sub:"Good effort!",color:"#b45309"},
+  {min:0, label:"🌟 Keep Practicing!",sub:"You can do it!",color:"#7c3aed"}
+];
 
-  const submit=()=>{
-    let score=0;
-    let earnedCoins=0;
+const ENC = ["Amazing! 🌟","Correct! 🎉","Great job! 💪","Brilliant! ✨","Spot on! 🎯"];
+const rand = () => ENC[Math.floor(Math.random()*ENC.length)];
 
-    mission.questions.forEach((q,i)=>{
-      if(answers[i]===q.answer){
-        score+=Math.floor(mission.points/mission.questions.length);
-        earnedCoins+=2;
-      }
-    });
+function shuffle(arr){
+  const a=[...arr];
+  for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}
+  return a;
+}
 
-    earnedCoins+=5;
-    setCoins(c=>c+earnedCoins);
-    setTotalScore(s=>s+score);
-    setSubmitted(true);
+// ── styles helpers ──
+const btnBase = (bg,border,color,extra={}) => ({background:bg,border,color,borderRadius:10,padding:"10px 14px",textAlign:"left",fontSize:14,width:"100%",marginBottom:7,fontWeight:500,transition:"all 0.15s",...extra});
+
+function ScrambleMission({mission, mc, onSubmit}){
+  const total = mission.questions.length;
+  const [qIdx,setQIdx] = useState(0);
+  const [pools,setPools] = useState(()=>mission.questions.map(q=>shuffle(q.words)));
+  const [selected,setSelected] = useState(()=>mission.questions.map(()=>[]));
+  const [result,setResult] = useState(null);
+  const [done,setDone] = useState(false);
+
+  const q=mission.questions[qIdx], pool=pools[qIdx], sel=selected[qIdx];
+
+  const pickWord=(word,idx)=>{
+    if(result!==null)return;
+    const np=[...pool]; np.splice(idx,1);
+    setPools(pools.map((p,i)=>i===qIdx?np:p));
+    setSelected(selected.map((s,i)=>i===qIdx?[...sel,word]:s));
   };
-
+  const removeWord=(word,idx)=>{
+    if(result!==null)return;
+    const ns=[...sel]; ns.splice(idx,1);
+    setPools(pools.map((p,i)=>i===qIdx?[...pool,word]:p));
+    setSelected(selected.map((s,i)=>i===qIdx?ns:s));
+  };
+  const check=()=>setResult(sel.join(" ")===q.answer);
   const next=()=>{
-    setAnswers({});
-    setSubmitted(false);
-    if(missionIdx===missions.length-1) setScreen("end");
-    else setMissionIdx(m=>m+1);
+    if(qIdx+1>=total){
+      let sc=0;
+      mission.questions.forEach((q,i)=>{if(selected[i].join(" ")===q.answer)sc+=Math.floor(mission.points/total);});
+      setDone(true); onSubmit(sc);
+    } else { setResult(null); setQIdx(i=>i+1); }
   };
 
-  if(screen==="home") return (
-    <div style={{textAlign:"center",padding:40,fontFamily:"Nunito"}}>
-      <h1 style={{color:"#22c55e"}}>Learn English Fun!</h1>
-      <button onClick={()=>setScreen("game")}>Start</button>
-    </div>
-  );
+  if(done) return null;
 
-  if(screen==="end") return (
-    <div style={{textAlign:"center"}}>
-      <h2>Score: {totalScore}/100</h2>
-      <h3>💰 Coins: {coins}</h3>
-      <button onClick={()=>location.reload()}>Restart</button>
-    </div>
-  );
+  const answerBorder = result===true?"2px solid #16a34a":result===false?"2px solid #dc2626":`2px dashed ${mc.accent}`;
 
-  return (
-    <div style={{padding:20,fontFamily:"Nunito"}}>
-      <h3>{mission.title}</h3>
-
-      <div style={{display:"flex",gap:10}}>
-        <div>⭐ {totalScore}</div>
-        <div>💰 {coins}</div>
-      </div>
-
-      {mission.questions.map((q,i)=>(
-        <div key={i}>
-          <p>{q.q}</p>
-          {q.options.map(opt=>(
-            <button key={opt} onClick={()=>setAnswers(a=>({...a,[i]:opt}))}>
-              {opt}
-            </button>
-          ))}
-        </div>
-      ))}
-
-      {!submitted ? (
-        <button onClick={submit}>Submit</button>
-      ) : (
-        <button onClick={next}>
-          {missionIdx===7?"Finish":"Next"}
-        </button>
-      )}
-    </div>
+  return e("div",null,
+    e("div",{style:{fontSize:12,color:mc.accent,fontWeight:700,marginBottom:12}},`Question ${qIdx+1} of ${total}`),
+    e("div",{style:{minHeight:54,background:"#fff",border:answerBorder,borderRadius:12,padding:"10px 12px",marginBottom:14,display:"flex",flexWrap:"wrap",gap:8,alignItems:"center"}},
+      sel.length===0 && e("span",{style:{color:"#bbb",fontSize:13}},"Tap words below to build your sentence..."),
+      sel.map((w,i)=>e("button",{key:i,onClick:()=>removeWord(w,i),style:{
+        background:result===true?"#dcfce7":result===false?"#fee2e2":mc.light,
+        border:`1.5px solid ${result===true?"#16a34a":result===false?"#dc2626":mc.accent}`,
+        color:result===true?"#14532d":result===false?"#7f1d1d":mc.accent,
+        borderRadius:8,padding:"6px 12px",fontSize:14,fontWeight:600,cursor:result!==null?"default":"pointer"
+      }},w))
+    ),
+    e("div",{style:{display:"flex",flexWrap:"wrap",gap:8,marginBottom:16}},
+      pool.map((w,i)=>e("button",{key:i,onClick:()=>pickWord(w,i),style:{
+        background:"#fff",border:`1.5px solid ${mc.light}`,color:"#444",
+        borderRadius:8,padding:"6px 12px",fontSize:14,fontWeight:500,
+        cursor:result!==null?"default":"pointer",opacity:result!==null?0.5:1
+      }},w))
+    ),
+    result!==null && e("div",{style:{background:result?"#dcfce7":"#fee2e2",borderRadius:10,padding:"10px 14px",marginBottom:12,fontSize:13,fontWeight:600,color:result?"#14532d":"#7f1d1d"}},
+      result?`${rand()} ✅`:`❌ Correct: ${q.answer}`
+    ),
+    result===null
+      ? e("button",{onClick:check,disabled:sel.length===0,style:{width:"100%",padding:13,background:sel.length===0?"#ddd":`linear-gradient(135deg,${mc.accent},#7c3aed)`,color:"#fff",border:"none",borderRadius:12,fontSize:15,fontWeight:700}},"✅ Check Answer!")
+      : e("button",{onClick:next,style:{width:"100%",padding:13,background:`linear-gradient(135deg,${mc.accent},#7c3aed)`,color:"#fff",border:"none",borderRadius:12,fontSize:15,fontWeight:700}},
+          qIdx+1>=total?"🏁 Finish Mission!":"➡️ Next Question!")
   );
 }
+
+function App(){
+  const [screen,setScreen]=useState("home");
+  const [mIdx,setMIdx]=useState(0);
+  const [total,setTotal]=useState(0);
+  const [scores,setScores]=useState({});
+  const [answers,setAnswers]=useState({});
+  const [submitted,setSubmitted]=useState(false);
+  const [feedback,setFeedback]=useState({});
+  const [writing,setWriting]=useState({});
+  const topRef=useRef();
+
+  const mission=missions[mIdx], mc=MC[mIdx];
+  const TOTAL_PTS=missions.reduce((s,m)=>s+m.points,0);
+  const scrollTop=()=>topRef.current&&topRef.current.scrollIntoView({behavior:"smooth"});
+
+  const submit=()=>{
+    if(submitted)return;
+    setSubmitted(true);
+    let earned=0; const fb={};
+    if(mission.type==="multiple_choice"||mission.type==="true_false"){
+      mission.questions.forEach((q,i)=>{const ok=answers[i]===q.answer;fb[i]=ok;if(ok)earned+=Math.floor(mission.points/mission.questions.length);});
+    } else if(mission.type==="writing"){
+      mission.questions.forEach((q,i)=>{const ok=writing[i]&&writing[i].trim().length>5;fb[i]=ok?"ok":"empty";if(ok)earned+=Math.floor(mission.points/mission.questions.length);});
+    }
+    setFeedback(fb); setScores(s=>({...s,[mIdx]:earned})); setTotal(t=>t+earned);
+  };
+
+  const handleScramble=(score)=>{setScores(s=>({...s,[mIdx]:score}));setTotal(t=>t+score);setSubmitted(true);};
+
+  const nextMission=()=>{
+    setAnswers({});setFeedback({});setWriting({});setSubmitted(false);
+    if(mIdx+1>=missions.length)setScreen("results");
+    else setMIdx(i=>i+1);
+    scrollTop();
+  };
+
+  const restart=()=>{setScreen("home");setMIdx(0);setTotal(0);setScores({});setAnswers({});setFeedback({});setWriting({});setSubmitted(false);};
+
+  const optBtn=(opt,qi,q)=>{
+    const sel=answers[qi]===opt, ok=submitted&&opt===q.answer, bad=submitted&&sel&&!ok;
+    let bg="#fff",border=`1.5px solid ${mc.light}`,color="#333";
+    if(sel&&!submitted){bg=mc.light;border=`2px solid ${mc.accent}`;color=mc.accent;}
+    if(ok){bg="#dcfce7";border="2px solid #16a34a";color="#14532d";}
+    if(bad){bg="#fee2e2";border="2px solid #dc2626";color="#7f1d1d";}
+    return e("button",{key:opt,onClick:()=>{if(!submitted)setAnswers(a=>({...a,[qi]:opt}));},style:btnBase(bg,border,color)},
+      submitted&&ok?"✅ "+opt : submitted&&bad?"❌ "+opt : opt);
+  };
+
+  const tfBtn=(val,qi,q)=>{
+    const sel=answers[qi]===val, ok=submitted&&val===q.answer, bad=submitted&&sel&&!ok;
+    let bg="#fff",border=`1.5px solid ${mc.light}`,color="#333";
+    if(sel&&!submitted){bg=mc.light;border=`2px solid ${mc.accent}`;color=mc.accent;}
+    if(ok){bg="#dcfce7";border="2px solid #16a34a";color="#14532d";}
+    if(bad){bg="#fee2e2";border="2px solid #dc2626";color="#7f1d1d";}
+    return e("button",{key:String(val),onClick:()=>{if(!submitted)setAnswers(a=>({...a,[qi]:val}));},
+      style:{...btnBase(bg,border,color),width:"auto",padding:"10px 24px",textAlign:"center"}},
+      val?"✅ TRUE":"❌ FALSE");
+  };
+
+  // ── HOME ──
+  if(screen==="home") return e("div",{style:{background:"linear-gradient(135deg,#f0f4ff 0%,#fff0f6 50%,#f5f0ff 100%)",minHeight:"100vh",padding:"2rem 1rem"}},
+    e("div",{style:{maxWidth:600,margin:"0 auto"}},
+      e("div",{style:{textAlign:"center",marginBottom:"1.5rem"}},
+        e("div",{style:{fontSize:64,marginBottom:8}},"🌍"),
+        e("h1",{style:{fontSize:28,fontWeight:700,color:"#4361ee",margin:"0 0 6px"}},"Daily Life Adventure"),
+        e("p",{style:{color:"#7c3aed",fontSize:15,margin:"0 0 2px",fontWeight:500}},"A super fun English game!"),
+        e("p",{style:{color:"#888",fontSize:13,margin:0}},`Level A1–A2 · 10 Missions · ${TOTAL_PTS} Points`)
+      ),
+      e("div",{style:{display:"grid",gridTemplateColumns:"repeat(5,1fr)",gap:8,marginBottom:"1.5rem"}},
+        missions.map((m,i)=>e("div",{key:i,style:{background:MC[i].bg,borderRadius:12,padding:"10px 6px",border:`2px solid ${MC[i].light}`,textAlign:"center"}},
+          e("div",{style:{fontSize:22}},m.icon),
+          e("div",{style:{fontSize:11,fontWeight:600,color:MC[i].accent,marginTop:4}},`M${m.id}`),
+          e("div",{style:{fontSize:10,color:"#888"}},`${m.points}pts`)
+        ))
+      ),
+      e("div",{style:{background:"#fff",borderRadius:16,padding:"1.2rem",marginBottom:"1.2rem",border:"2px solid #e0d7ff"}},
+        e("div",{style:{fontSize:14,fontWeight:600,color:"#7c3aed",marginBottom:8}},"🎮 How to play:"),
+        e("div",{style:{fontSize:13,color:"#555",lineHeight:1.8}},
+          "✅ Complete each mission to earn points",e("br"),
+          "🌟 Get immediate feedback after each answer",e("br"),
+          "🏆 Earn a medal at the end based on your score!")
+      ),
+      e("button",{onClick:()=>setScreen("game"),style:{width:"100%",padding:"16px",background:"linear-gradient(135deg,#7c3aed,#4361ee)",color:"#fff",border:"none",borderRadius:14,fontSize:17,fontWeight:700,boxShadow:"0 4px 14px rgba(124,58,237,0.35)"}},"🚀 Start Adventure!")
+    )
+  );
+
+  // ── RESULTS ──
+  if(screen==="results"){
+    const pct=Math.round((total/TOTAL_PTS)*100);
+    const medal=medals.find(m=>pct>=m.min);
+    return e("div",{style:{background:"linear-gradient(135deg,#f0f4ff 0%,#fff0f6 50%,#f5f0ff 100%)",minHeight:"100vh",padding:"2rem 1rem"}},
+      e("div",{style:{maxWidth:560,margin:"0 auto",textAlign:"center"}},
+        e("div",{style:{fontSize:72,marginBottom:8}},medal.label.split(" ")[0]),
+        e("h2",{style:{fontSize:24,fontWeight:700,color:medal.color,margin:"0 0 4px"}},medal.label.slice(2)),
+        e("p",{style:{color:"#888",marginBottom:20,fontSize:15}},`${medal.sub} You finished all 10 missions!`),
+        e("div",{style:{background:"#fff",borderRadius:16,padding:"1.5rem",marginBottom:20,border:"2px solid #e0d7ff"}},
+          e("div",{style:{fontSize:52,fontWeight:700,color:"#7c3aed"}},total,e("span",{style:{fontSize:22,color:"#bbb"}},`/${TOTAL_PTS}`)),
+          e("div",{style:{color:"#888",fontSize:14,marginBottom:12}},`Total Score · ${pct}%`),
+          e("div",{style:{background:"#f0f0ff",borderRadius:99,height:14,overflow:"hidden"}},
+            e("div",{style:{width:`${pct}%`,background:"linear-gradient(90deg,#7c3aed,#4361ee)",borderRadius:99,height:14}})
+          )
+        ),
+        e("div",{style:{display:"grid",gridTemplateColumns:"1fr 1fr",gap:8,marginBottom:20}},
+          missions.map((m,i)=>{
+            const sc=scores[i]||0, c=MC[i];
+            return e("div",{key:i,style:{background:c.bg,borderRadius:10,padding:"10px 14px",border:`2px solid ${c.light}`,display:"flex",justifyContent:"space-between",alignItems:"center"}},
+              e("span",{style:{fontSize:13,color:"#555"}},`${m.icon} Mission ${m.id}`),
+              e("span",{style:{fontSize:13,fontWeight:700,color:sc>=7?"#16a34a":"#dc2626"}},`${sc}/${m.points}`)
+            );
+          })
+        ),
+        e("button",{onClick:restart,style:{padding:"14px 40px",background:"linear-gradient(135deg,#7c3aed,#4361ee)",color:"#fff",border:"none",borderRadius:14,fontSize:15,fontWeight:700}},"🔄 Play Again!")
+      )
+    );
+  }
+
+  // ── GAME ──
+  const progress=Math.round((mIdx/missions.length)*100);
+  const isLast=mIdx===missions.length-1;
+
+  const nextBtn = e("button",{onClick:nextMission,style:{width:"100%",padding:15,background:`linear-gradient(135deg,${mc.accent},#7c3aed)`,color:"#fff",border:"none",borderRadius:14,fontSize:16,fontWeight:700,boxShadow:`0 4px 14px ${mc.accent}55`}},
+    isLast?"🏆 See My Results!":"➡️ Next Mission!");
+
+  const levelUpBox = e("div",null,
+    e("div",{style:{textAlign:"center",marginBottom:10,padding:"12px",background:mc.light,borderRadius:12,color:mc.accent,fontWeight:700,fontSize:15,border:`2px dashed ${mc.accent}`}},
+      isLast?"🏁 Last mission complete! Amazing!":"⬆️ Level Up! Ready for the next mission?"),
+    nextBtn
+  );
+
+  return e("div",{style:{background:mc.bg,minHeight:"100vh",padding:"1rem",transition:"background 0.4s"},ref:topRef},
+    e("div",{style:{maxWidth:620,margin:"0 auto"}},
+      // header
+      e("div",{style:{background:"#fff",borderRadius:14,padding:"10px 16px",marginBottom:14,border:`2px solid ${mc.light}`,display:"flex",alignItems:"center",justifyContent:"space-between"}},
+        e("div",{style:{fontSize:13,fontWeight:600,color:mc.accent}},`Mission ${mIdx+1} of ${missions.length}`),
+        e("div",{style:{flex:1,margin:"0 14px"}},
+          e("div",{style:{background:"#f0f0ff",borderRadius:99,height:10,overflow:"hidden"}},
+            e("div",{style:{width:`${progress}%`,background:`linear-gradient(90deg,${mc.accent},${mc.light})`,borderRadius:99,height:10,transition:"width 0.4s"}})
+          )
+        ),
+        e("div",{style:{fontSize:13,fontWeight:700,color:mc.accent}},`⭐ ${total} pts`)
+      ),
+      // card
+      e("div",{style:{background:"#fff",border:`2px solid ${mc.light}`,borderRadius:16,padding:"1.25rem",marginBottom:14}},
+        e("div",{style:{background:mc.bg,borderRadius:12,padding:"12px 16px",marginBottom:16,display:"flex",alignItems:"center",gap:12,border:`1.5px dashed ${mc.light}`}},
+          e("span",{style:{fontSize:36}},mission.icon),
+          e("div",null,
+            e("div",{style:{fontSize:11,fontWeight:700,color:mc.accent,textTransform:"uppercase",letterSpacing:0.8}},`+${mission.points} points`),
+            e("div",{style:{fontSize:15,fontWeight:700,color:"#333"}},mission.title)
+          )
+        ),
+        e("div",{style:{background:mc.light,borderRadius:10,padding:"10px 14px",marginBottom:18,fontSize:13,color:mc.accent,fontWeight:600}},`📋 ${mission.instructions}`),
+        mission.text && e("div",{style:{background:"#fffbeb",borderRadius:10,padding:"14px 16px",fontSize:13,color:"#555",marginBottom:18,lineHeight:1.9,whiteSpace:"pre-line",border:"1.5px solid #fde68a"}},mission.text),
+
+        // SCRAMBLE
+        mission.type==="scramble" && !submitted && e(ScrambleMission,{mission,mc,onSubmit:handleScramble}),
+
+        // MULTIPLE CHOICE
+        mission.type==="multiple_choice" && mission.questions.map((q,qi)=>
+          e("div",{key:qi,style:{marginBottom:22,background:mc.bg,borderRadius:12,padding:"14px"}},
+            e("div",{style:{fontSize:14,fontWeight:600,color:"#333",marginBottom:10}},`${qi+1}. ${q.q}`),
+            q.options.map(opt=>optBtn(opt,qi,q)),
+            submitted && e("div",{style:{fontSize:12,color:feedback[qi]?"#16a34a":"#dc2626",fontWeight:600,marginTop:2}},
+              feedback[qi]?rand():`Correct answer: ${q.answer}`)
+          )
+        ),
+
+        // TRUE/FALSE
+        mission.type==="true_false" && mission.questions.map((q,qi)=>
+          e("div",{key:qi,style:{marginBottom:16,background:mc.bg,borderRadius:12,padding:"12px 14px"}},
+            e("div",{style:{fontSize:13,color:"#444",marginBottom:8,fontWeight:500}},`${qi+1}. ${q.q}`),
+            e("div",{style:{display:"flex",gap:10}},[true,false].map(v=>tfBtn(v,qi,q))),
+            submitted && e("div",{style:{fontSize:12,color:feedback[qi]?"#16a34a":"#dc2626",fontWeight:600,marginTop:6}},
+              feedback[qi]?rand():`Correct: ${q.answer?"TRUE":"FALSE"}`)
+          )
+        ),
+
+        // WRITING
+        mission.type==="writing" && mission.questions.map((q,qi)=>
+          e("div",{key:qi,style:{marginBottom:20,background:mc.bg,borderRadius:12,padding:"14px"}},
+            e("div",{style:{fontSize:14,fontWeight:600,color:"#333",marginBottom:8}},`${qi+1}. ${q.q}`),
+            e("textarea",{placeholder:q.placeholder,value:writing[qi]||"",onChange:ev=>setWriting(a=>({...a,[qi]:ev.target.value})),disabled:submitted,
+              style:{width:"100%",minHeight:72,padding:10,fontSize:13,borderRadius:10,border:`1.5px solid ${mc.light}`,background:"#fff",color:"#333",resize:"vertical"}}),
+            submitted && e("div",{style:{fontSize:12,color:feedback[qi]==="ok"?"#16a34a":"#dc2626",fontWeight:600,marginTop:4}},
+              feedback[qi]==="ok"?"✅ Great writing! Keep it up!":"❌ Please write a full sentence!")
+          )
+        )
+      ),
+
+      // BUTTONS
+      mission.type!=="scramble" && (
+        submitted ? levelUpBox :
+        e("button",{onClick:submit,style:{width:"100%",padding:15,background:`linear-gradient(135deg,${mc.accent},#7c3aed)`,color:"#fff",border:"none",borderRadius:14,fontSize:16,fontWeight:700,boxShadow:`0 4px 14px ${mc.accent}55`}},"✅ Submit Mission!")
+      ),
+      mission.type==="scramble" && submitted && levelUpBox
+    )
+  );
+}
+
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(e(App));
+</script>
+</body>
+</html>
